@@ -1,6 +1,14 @@
 require('dotenv').config();
 const Stripe = require('stripe');
-const stripe = Stripe(process.env.STRIPE_SECRET_KEY);const express = require('express');
+
+// Validate Stripe configuration
+if (!process.env.STRIPE_SECRET_KEY) {
+  console.error('Error: STRIPE_SECRET_KEY is not set in environment variables');
+  process.exit(1);
+}
+
+const stripe = Stripe(process.env.STRIPE_SECRET_KEY);
+const express = require('express');
 const cors = require('cors');
 const multer = require('multer');
 const csv = require('csv-parser');
@@ -476,7 +484,9 @@ function calculateRiskOfRuin(trades) {
 // Start the server
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
-});app.get('/api/stripe-test', async (req, res) => {
+});
+
+app.get('/api/stripe-test', async (req, res) => {
   try {
     const balance = await stripe.balance.retrieve();
     res.json({ success: true, balance });
@@ -519,7 +529,7 @@ app.post('/api/create-checkout-session/subscription', async (req, res) => {
       mode: 'subscription',
       line_items: [
         {
-          price: 'price_1Nxxxxxxx', // Replace with your Stripe price ID for $100/month subscription
+          price: 'price_1RLkrvFHOW0K7xmh50RPMD4H',
           quantity: 1,
         },
       ],
@@ -528,6 +538,7 @@ app.post('/api/create-checkout-session/subscription', async (req, res) => {
     });
     res.json({ url: session.url });
   } catch (err) {
+    console.error('Stripe checkout error:', err);
     res.status(500).json({ error: err.message });
   }
 });
