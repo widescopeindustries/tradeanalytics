@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thank You - TradeAnalyticsAI</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body style="background:#181a20; color:#f3f4f6;">
+    <div class="container" style="max-width:600px; margin:60px auto 0; background:#23272f; border-radius:16px; box-shadow:0 4px 24px rgba(0,0,0,0.18); padding:40px 32px;">
+        <div style="text-align:center;">
+            <i class="fas fa-check-circle" style="font-size:3rem; color:#38bdf8;"></i>
+            <h1 style="margin:18px 0 8px; color:#38bdf8;">Thank You!</h1>
+            <p style="font-size:1.15rem; color:#e5e7eb;">Your payment was successful.<br>Upload your trading data or enter your trades below to receive your AI-powered report.</p>
+        </div>
+        <div style="margin-top:36px;">
+            <h2 style="color:#38bdf8; font-size:1.3rem; margin-bottom:18px;">Upload Your Trading Data</h2>
+            <form id="upload-form" class="analysis-form" enctype="multipart/form-data" style="background:#181a20;">
+                <div class="file-upload">
+                    <label for="csv-file">Upload your trading data (CSV, PDF, or Word format)</label>
+                    <input type="file" id="csv-file" name="tradingData" accept=".csv,.pdf,.doc,.docx">
+                    <p class="file-hint">Your file should include: Date, Symbol, Side (Buy/Sell), Price, Size, Profit/Loss. Supported formats: CSV, PDF, Word (doc, docx).</p>
+                </div>
+                <button type="submit" class="cta-button">Analyze My Trades</button>
+            </form>
+        </div>
+        <div style="margin-top:36px;">
+            <h2 style="color:#38bdf8; font-size:1.3rem; margin-bottom:18px;">Or Enter Trades Manually</h2>
+            <form id="manual-form" class="analysis-form" style="background:#181a20;">
+                <div class="manual-trades">
+                    <div class="trade-entries" id="trade-entries">
+                        <div class="trade-entry">
+                            <input type="date" name="date" placeholder="Date" required>
+                            <input type="text" name="symbol" placeholder="Symbol" required>
+                            <select name="side">
+                                <option value="buy">Buy</option>
+                                <option value="sell">Sell</option>
+                            </select>
+                            <input type="number" name="price" placeholder="Price" step="0.01" required>
+                            <input type="number" name="size" placeholder="Size" step="0.01" required>
+                            <input type="number" name="profit" placeholder="Profit/Loss" step="0.01" required>
+                        </div>
+                    </div>
+                    <button type="button" id="add-trade" class="secondary-button">+ Add Another Trade</button>
+                </div>
+                <button type="submit" class="cta-button">Analyze My Trades</button>
+            </form>
+        </div>
+        <div style="margin-top:36px; text-align:center;">
+            <a href="index.html" style="color:#38bdf8; text-decoration:underline;">&larr; Back to Home</a>
+        </div>
+        <section id="analysis-results" class="analysis-results hidden">
+            <div class="container">
+                <h2>Your AI Trading Analysis</h2>
+                <div class="results-navigation">
+                    <button class="nav-button active" data-section="summary">Summary</button>
+                    <button class="nav-button" data-section="metrics">Metrics</button>
+                    <button class="nav-button" data-section="patterns">Patterns</button>
+                    <button class="nav-button" data-section="insights">Insights</button>
+                    <button class="nav-button" data-section="risk">Risk Profile</button>
+                </div>
+                <div class="results-container">
+                    <div class="result-section active" id="summary-section">
+                        <h3>Performance Summary</h3>
+                        <div class="summary-metrics">
+                            <div class="metric-card">
+                                <span class="metric-value" id="total-trades">0</span>
+                                <span class="metric-label">Total Trades</span>
+                            </div>
+                            <div class="metric-card">
+                                <span class="metric-value" id="win-rate">0%</span>
+                                <span class="metric-label">Win Rate</span>
+                            </div>
+                            <div class="metric-card">
+                                <span class="metric-value" id="profit-factor">0</span>
+                                <span class="metric-label">Profit Factor</span>
+                            </div>
+                            <div class="metric-card">
+                                <span class="metric-value" id="expectancy">$0</span>
+                                <span class="metric-label">Expectancy</span>
+                            </div>
+                        </div>
+                        <div id="chart-container" class="chart-container">
+                            <div class="chart-placeholder">
+                                <p>Charts will appear here after analysis</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="result-section" id="metrics-section">
+                        <h3>Detailed Metrics</h3>
+                        <div class="metrics-grid"></div>
+                    </div>
+                    <div class="result-section" id="patterns-section">
+                        <h3>Trading Patterns</h3>
+                        <div class="patterns-container">
+                            <div class="pattern-group">
+                                <h4>Time-Based Patterns</h4>
+                                <div id="time-patterns" class="pattern-list"></div>
+                            </div>
+                            <div class="pattern-group">
+                                <h4>Market Condition Patterns</h4>
+                                <div id="market-patterns" class="pattern-list"></div>
+                            </div>
+                            <div class="pattern-group">
+                                <h4>Psychological Patterns</h4>
+                                <div id="psychological-patterns" class="pattern-list"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="result-section" id="insights-section">
+                        <h3>AI-Generated Insights</h3>
+                        <div id="insights-container" class="insights-container"></div>
+                    </div>
+                    <div class="result-section" id="risk-section">
+                        <h3>Risk Profile Analysis</h3>
+                        <div class="risk-overview">
+                            <div class="risk-level">
+                                <h4>Overall Risk Level</h4>
+                                <div id="risk-indicator" class="risk-indicator">
+                                    <span class="risk-text">Medium</span>
+                                </div>
+                            </div>
+                            <div class="risk-metrics">
+                                <div class="risk-metric">
+                                    <span class="metric-label">Max Drawdown</span>
+                                    <span class="metric-value" id="max-drawdown">0%</span>
+                                </div>
+                                <div class="risk-metric">
+                                    <span class="metric-label">Max Consecutive Losses</span>
+                                    <span class="metric-value" id="max-consecutive-losses">0</span>
+                                </div>
+                                <div class="risk-metric">
+                                    <span class="metric-label">Risk of Ruin</span>
+                                    <span class="metric-value" id="risk-of-ruin">Low</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="risk-suggestions">
+                            <h4>Improvement Suggestions</h4>
+                            <ul id="risk-suggestions-list"></ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html> 
