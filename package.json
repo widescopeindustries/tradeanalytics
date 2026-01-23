@@ -2,7 +2,7 @@
   "name": "tradeanalyticsai",
   "version": "1.0.0",
   "description": "AI-powered trading analytics tool",
-  "main": "server.js",
+
   "scripts": {
     "start": "node server.js",
     "dev": "nodemon server.js"
