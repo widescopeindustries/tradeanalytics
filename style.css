@@ -559,6 +559,95 @@ footer .footer-links a:hover {
     display: block;
 }
 
+.tool-tabs {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 2rem;
+}
+
+.tool-tab {
+    padding: 1rem 1.5rem;
+    background: none;
+    border: none;
+    font-size: 1rem;
+    font-weight: 500;
+    color: #666;
+    cursor: pointer;
+    position: relative;
+    transition: color 0.3s;
+    border-bottom: 2px solid transparent;
+}
+
+.tool-tab:hover {
+    color: #007bff;
+}
+
+.tool-tab.active {
+    color: #007bff;
+    border-bottom-color: #007bff;
+}
+
+.tool-content {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.tool-pane {
+    display: none;
+    animation: fadeIn 0.5s;
+}
+
+.tool-pane.active {
+    display: block;
+}
+
+.trade-entry {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 10px;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.trade-entry input, .trade-entry select {
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 0.9rem;
+}
+
+.trade-entry input[type="number"] {
+    width: 100px;
+}
+
+.trade-entry input[type="date"] {
+    width: 120px;
+}
+
+.trade-entry input[type="text"] {
+    width: 100px;
+}
+
+.insight-item {
+    margin-bottom: 1rem;
+    padding: 1rem;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.insight-item h4 {
+    margin-bottom: 0.5rem;
+    color: #007bff;
+}
+
+.pattern-item {
+    margin-bottom: 0.5rem;
+    padding: 0.5rem;
+    background: #f9f9f9;
+    border-radius: 4px;
+}
+
 @keyframes fadeIn {
     from { opacity: 0; }
     to { opacity: 1; }

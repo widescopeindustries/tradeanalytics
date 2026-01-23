@@ -174,7 +174,51 @@
                 </div>
             </div>
         </section>
-        
+
+        <!-- AI Analysis Tool Section -->
+        <section id="analysis-tool" class="analysis-tool" style="background: #f8fafc; padding: 48px 0;">
+            <div class="container">
+                <h2 style="text-align:center; font-size:2.2rem; margin-bottom: 12px;">Try the AI Analysis Tool</h2>
+                <p style="text-align:center; color:#555; margin-bottom: 32px;">Upload your trading data or enter trades manually to get a free sample analysis.</p>
+                <div class="tool-tabs" style="display: flex; justify-content: center; margin-bottom: 32px;">
+                    <button class="tool-tab active" data-tool="upload">Upload File</button>
+                    <button class="tool-tab" data-tool="manual">Manual Entry</button>
+                </div>
+                <div class="tool-content">
+                    <!-- Upload Form -->
+                    <div class="tool-pane active" id="upload-pane">
+                        <form id="upload-form" enctype="multipart/form-data">
+                            <div style="text-align: center; margin-bottom: 24px;">
+                                <input type="file" id="csv-file" accept=".csv,.pdf,.doc,.docx" style="display: block; margin: 0 auto 16px; padding: 8px;">
+                                <small style="color:#666;">Supported formats: CSV, PDF, Word (.doc, .docx)</small>
+                            </div>
+                            <button type="submit" class="cta-button primary-cta" style="display: block; margin: 0 auto;">Analyze Trades</button>
+                        </form>
+                    </div>
+                    <!-- Manual Entry Form -->
+                    <div class="tool-pane" id="manual-pane">
+                        <form id="manual-form">
+                            <div id="trade-entries">
+                                <div class="trade-entry" style="display: flex; gap: 10px; margin-bottom: 10px; align-items: center;">
+                                    <input type="date" name="date" placeholder="Date" required style="flex:1; padding:8px;">
+                                    <input type="text" name="symbol" placeholder="Symbol" required style="flex:1; padding:8px;">
+                                    <select name="side" style="flex:0.5; padding:8px;">
+                                        <option value="buy">Buy</option>
+                                        <option value="sell">Sell</option>
+                                    </select>
+                                    <input type="number" name="price" placeholder="Price" step="0.01" required style="flex:1; padding:8px;">
+                                    <input type="number" name="size" placeholder="Size" step="0.01" required style="flex:0.8; padding:8px;">
+                                    <input type="number" name="profit" placeholder="Profit/Loss" step="0.01" required style="flex:1; padding:8px;">
+                                </div>
+                            </div>
+                            <button type="button" id="add-trade" class="cta-button secondary-cta" style="margin-right: 16px;">Add Another Trade</button>
+                            <button type="submit" class="cta-button primary-cta">Analyze Trades</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+
         <!-- Analysis Results Section -->
         <section id="analysis-results" class="analysis-results hidden">
             <div class="container">

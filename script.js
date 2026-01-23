@@ -50,15 +50,28 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // Tab switching for analysis tool
-    const tabButtons = document.querySelectorAll('.tab-button');
-    const tabPanes = document.querySelectorAll('.tab-pane');
+    const toolTabs = document.querySelectorAll('.tool-tab');
+    const toolPanes = document.querySelectorAll('.tool-pane');
+    toolTabs.forEach(btn => {
+        btn.addEventListener('click', () => {
+            toolTabs.forEach(b => b.classList.remove('active'));
+            toolPanes.forEach(pane => pane.classList.remove('active'));
+            btn.classList.add('active');
+            const tool = btn.getAttribute('data-tool');
+            document.getElementById(tool + '-pane').classList.add('active');
+        });
+    });
+
+    // Tab switching for results
+    const tabButtons = document.querySelectorAll('.nav-button');
+    const resultSections = document.querySelectorAll('.result-section');
     tabButtons.forEach(btn => {
         btn.addEventListener('click', () => {
             tabButtons.forEach(b => b.classList.remove('active'));
-            tabPanes.forEach(pane => pane.classList.remove('active'));
+            resultSections.forEach(section => section.classList.remove('active'));
             btn.classList.add('active');
-            const tab = btn.getAttribute('data-tab');
-            document.getElementById(tab + '-tab').classList.add('active');
+            const section = btn.getAttribute('data-section');
+            document.getElementById(section + '-section').classList.add('active');
         });
     });
 
@@ -168,6 +181,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const resultsSection = document.getElementById('analysis-results');
         if (!resultsSection) return;
         resultsSection.classList.remove('hidden');
+        resultsSection.scrollIntoView({ behavior: 'smooth' });
         // Fill summary metrics
         document.getElementById('total-trades').textContent = analysis.summary.totalTrades;
         document.getElementById('win-rate').textContent = (analysis.summary.winRate || 0).toFixed(2) + '%';
@@ -201,7 +215,7 @@ document.addEventListener('DOMContentLoaded', () => {
             analysis.insights.forEach(insight => {
                 const div = document.createElement('div');
                 div.className = 'insight-item';
-                div.textContent = insight;
+                div.innerHTML = `<h4>${insight.category}</h4><p>${insight.insight}</p><p><strong>Action:</strong> ${insight.actionItem}</p>`;
                 insightsContainer.appendChild(div);
             });
         }
@@ -228,7 +242,14 @@ document.addEventListener('DOMContentLoaded', () => {
         const el = document.getElementById(elementId);
         if (!el) return;
         el.innerHTML = '';
-        if (Array.isArray(patterns)) {
+        if (patterns && typeof patterns === 'object') {
+            Object.entries(patterns).forEach(([key, value]) => {
+                const div = document.createElement('div');
+                div.className = 'pattern-item';
+                div.innerHTML = `<strong>${key.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase())}:</strong> ${value}`;
+                el.appendChild(div);
+            });
+        } else if (Array.isArray(patterns)) {
             patterns.forEach(pattern => {
                 const div = document.createElement('div');
                 div.className = 'pattern-item';
