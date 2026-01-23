@@ -4,6 +4,7 @@
   "description": "AI-powered trading analytics tool",
 
   "scripts": {
+    "vercel-build": "echo 'Static files ready'",
     "start": "node server.js",
     "dev": "nodemon server.js"
   },
