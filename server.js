@@ -532,11 +532,7 @@ function calculateRiskOfRuin(trades) {
   }
 }
 
-// Start the server
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
-});
-
+// Stripe Checkout endpoints
 app.get('/api/stripe-test', async (req, res) => {
   try {
     const balance = await stripe.balance.retrieve();
@@ -546,7 +542,6 @@ app.get('/api/stripe-test', async (req, res) => {
   }
 });
 
-// Stripe Checkout endpoints
 app.post('/api/create-checkout-session/report', async (req, res) => {
   try {
     const session = await stripe.checkout.sessions.create({
@@ -593,3 +588,13 @@ app.post('/api/create-checkout-session/subscription', async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 });
+
+// Export for Vercel serverless environment
+module.exports = app;
+
+// Start the server locally (not in Vercel)
+if (require.main === module) {
+  app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
+  });
+}
