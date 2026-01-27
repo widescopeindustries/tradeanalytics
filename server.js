@@ -1,13 +1,19 @@
 require('dotenv').config();
 const Stripe = require('stripe');
 
-// Validate Stripe configuration
-if (!process.env.STRIPE_SECRET_KEY) {
-  console.error('Error: STRIPE_SECRET_KEY is not set in environment variables');
-  process.exit(1);
+// Initialize Stripe with key if available, warn if not
+let stripe;
+if (process.env.STRIPE_SECRET_KEY) {
+  stripe = Stripe(process.env.STRIPE_SECRET_KEY);
+} else {
+  console.warn('Warning: STRIPE_SECRET_KEY is not set in environment variables');
+  console.warn('Stripe functionality will be disabled');
+  // Create a mock Stripe object to prevent errors
+  stripe = {
+    checkout: { sessions: { create: () => Promise.reject(new Error('Stripe not configured')) } },
+    balance: { retrieve: () => Promise.reject(new Error('Stripe not configured')) }
+  };
 }
-
-const stripe = Stripe(process.env.STRIPE_SECRET_KEY);
 const express = require('express');
 const cors = require('cors');
 const multer = require('multer');
@@ -27,12 +33,17 @@ app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
+// Health check endpoint (before static middleware)
+app.get('/api/health', (req, res) => {
+  res.json({ status: 'ok', timestamp: new Date().toISOString() });
+});
+
 // Serve static files from the root directory
 app.use(express.static('./'));
 
 // Configure multer for file uploads
 // Use memory storage for serverless (Vercel), disk storage for local
-const isServerless = process.env.VERCEL || !process.env.NODE_ENV?.includes('development');
+const isServerless = process.env.VERCEL === '1' || process.env.NODE_ENV === 'production';
 
 let storage;
 if (isServerless) {
@@ -622,6 +633,20 @@ app.post('/api/create-checkout-session/subscription', async (req, res) => {
   }
 });
 
+// Global error handler
+app.use((err, req, res, next) => {
+  console.error('Error:', err.message);
+  res.status(err.status || 500).json({
+    error: err.message || 'Internal Server Error',
+    status: err.status || 500
+  });
+});
+
+// 404 handler
+app.use((req, res) => {
+  res.status(404).json({ error: 'Not Found' });
+});
+
 // Export for Vercel serverless environment
 module.exports = app;
 
@@ -629,5 +654,7 @@ module.exports = app;
 if (require.main === module) {
   app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
+    console.log('Environment:', process.env.NODE_ENV);
+    console.log('Stripe configured:', !!process.env.STRIPE_SECRET_KEY);
   });
 }
