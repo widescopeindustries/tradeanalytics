@@ -49,16 +49,19 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // Tab switching for analysis tool
-    const tabButtons = document.querySelectorAll('.tab-button');
-    const tabPanes = document.querySelectorAll('.tab-pane');
-    tabButtons.forEach(btn => {
+    // Tab switching for analysis results
+    const navButtons = document.querySelectorAll('.nav-button');
+    const resultSections = document.querySelectorAll('.result-section');
+    navButtons.forEach(btn => {
         btn.addEventListener('click', () => {
-            tabButtons.forEach(b => b.classList.remove('active'));
-            tabPanes.forEach(pane => pane.classList.remove('active'));
+            navButtons.forEach(b => b.classList.remove('active'));
+            resultSections.forEach(section => section.classList.remove('active'));
             btn.classList.add('active');
-            const tab = btn.getAttribute('data-tab');
-            document.getElementById(tab + '-tab').classList.add('active');
+            const section = btn.getAttribute('data-section');
+            const targetSection = document.getElementById(section + '-section');
+            if (targetSection) {
+                targetSection.classList.add('active');
+            }
         });
     });
 
@@ -97,6 +100,36 @@ document.addEventListener('DOMContentLoaded', () => {
         manualForm.addEventListener('submit', async (e) => {
             e.preventDefault();
             const entries = Array.from(document.querySelectorAll('#trade-entries .trade-entry'));
+
+            // Validate all entries before submission
+            for (const entry of entries) {
+                const date = entry.querySelector('input[name="date"]').value;
+                const symbol = entry.querySelector('input[name="symbol"]').value;
+                const price = parseFloat(entry.querySelector('input[name="price"]').value);
+                const size = parseFloat(entry.querySelector('input[name="size"]').value);
+                const profit = parseFloat(entry.querySelector('input[name="profit"]').value);
+
+                if (!date || !symbol) {
+                    alert('All trades must have a date and symbol.');
+                    return;
+                }
+
+                if (isNaN(price) || price <= 0) {
+                    alert('Price must be a valid positive number.');
+                    return;
+                }
+
+                if (isNaN(size) || size <= 0) {
+                    alert('Size must be a valid positive number.');
+                    return;
+                }
+
+                if (isNaN(profit)) {
+                    alert('Profit/Loss must be a valid number.');
+                    return;
+                }
+            }
+
             const trades = entries.map(entry => {
                 return {
                     date: entry.querySelector('input[name="date"]').value,
@@ -201,17 +234,40 @@ document.addEventListener('DOMContentLoaded', () => {
             analysis.insights.forEach(insight => {
                 const div = document.createElement('div');
                 div.className = 'insight-item';
-                div.textContent = insight;
+                // Handle both string and object insights
+                if (typeof insight === 'string') {
+                    div.textContent = insight;
+                } else if (insight.insight) {
+                    div.innerHTML = `<strong>${insight.category || 'Insight'}:</strong> ${insight.insight}<br><em>Action: ${insight.actionItem || 'N/A'}</em>`;
+                } else {
+                    div.textContent = JSON.stringify(insight);
+                }
                 insightsContainer.appendChild(div);
             });
         }
 
         // Fill risk profile
         if (analysis.riskProfile) {
-            document.getElementById('risk-indicator').querySelector('.risk-text').textContent = analysis.riskProfile.level || 'Medium';
-            document.getElementById('max-drawdown').textContent = (analysis.riskProfile.maxDrawdown || 0).toFixed(2) + '%';
-            document.getElementById('max-consecutive-losses').textContent = analysis.riskProfile.maxConsecutiveLosses || 0;
-            document.getElementById('risk-of-ruin').textContent = analysis.riskProfile.riskOfRuin || 'Low';
+            const riskIndicator = document.getElementById('risk-indicator');
+            if (riskIndicator && riskIndicator.querySelector('.risk-text')) {
+                riskIndicator.querySelector('.risk-text').textContent = analysis.riskProfile.riskLevel || 'Medium';
+            }
+
+            const maxDrawdownEl = document.getElementById('max-drawdown');
+            if (maxDrawdownEl) {
+                maxDrawdownEl.textContent = (analysis.riskProfile.maxDrawdown || 0).toFixed(2);
+            }
+
+            const maxLossesEl = document.getElementById('max-consecutive-losses');
+            if (maxLossesEl) {
+                maxLossesEl.textContent = analysis.riskProfile.maxConsecutiveLosses || 0;
+            }
+
+            const riskRuinEl = document.getElementById('risk-of-ruin');
+            if (riskRuinEl) {
+                riskRuinEl.textContent = analysis.riskProfile.riskOfRuin || 'Low';
+            }
+
             const suggestionsList = document.getElementById('risk-suggestions-list');
             if (suggestionsList) {
                 suggestionsList.innerHTML = '';
@@ -235,6 +291,18 @@ document.addEventListener('DOMContentLoaded', () => {
                 div.textContent = pattern;
                 el.appendChild(div);
             });
+        } else if (typeof patterns === 'object' && patterns !== null) {
+            // Handle object patterns (like time, market, and psychological patterns)
+            for (const [key, value] of Object.entries(patterns)) {
+                const div = document.createElement('div');
+                div.className = 'pattern-item';
+                if (Array.isArray(value)) {
+                    div.innerHTML = `<strong>${key}:</strong> ${value.join(', ')}`;
+                } else {
+                    div.innerHTML = `<strong>${key}:</strong> ${value}`;
+                }
+                el.appendChild(div);
+            }
         }
     }
 
