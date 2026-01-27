@@ -76,6 +76,7 @@ app.post('/api/upload', upload.single('tradingData'), async (req, res) => {
     const filePath = req.file.path;
     const ext = path.extname(req.file.originalname).toLowerCase();
     let results = [];
+    let responseHandled = false;
 
     if (ext === '.csv') {
       // Parse CSV file
@@ -83,72 +84,122 @@ app.post('/api/upload', upload.single('tradingData'), async (req, res) => {
         .pipe(csv())
         .on('data', (data) => results.push(data))
         .on('end', () => {
-          const analysisResult = performAIAnalysis(results);
-          const analysisId = Date.now().toString();
-          analysisResults[analysisId] = analysisResult;
-          res.json({ 
-            success: true, 
-            message: 'File uploaded and processed successfully',
-            analysisId: analysisId
+          if (responseHandled) return;
+          responseHandled = true;
+          try {
+            const analysisResult = performAIAnalysis(results);
+            const analysisId = Date.now().toString();
+            analysisResults[analysisId] = analysisResult;
+            res.json({
+              success: true,
+              message: 'File uploaded and processed successfully',
+              analysisId: analysisId
+            });
+          } catch (analysisError) {
+            res.status(500).json({ error: 'Analysis failed: ' + analysisError.message });
+          } finally {
+            // Clean up uploaded file
+            fs.unlink(filePath, (err) => {
+              if (err) console.error('Error deleting file:', err);
+            });
+          }
+        })
+        .on('error', (streamError) => {
+          if (responseHandled) return;
+          responseHandled = true;
+          res.status(400).json({ error: 'Failed to parse CSV: ' + streamError.message });
+          // Clean up uploaded file
+          fs.unlink(filePath, (err) => {
+            if (err) console.error('Error deleting file:', err);
           });
         });
       return;
     } else if (ext === '.pdf') {
-      // Parse PDF file
-      const dataBuffer = fs.readFileSync(filePath);
-      const pdfData = await pdfParse(dataBuffer);
-      // Try to extract tables from the text (very basic, expects CSV-like tables)
-      const lines = pdfData.text.split('\n');
-      const headers = lines.find(line => /date/i.test(line) && /symbol/i.test(line));
-      if (!headers) throw new Error('No recognizable table found in PDF');
-      const headerArr = headers.split(/,|\s{2,}|\t/).map(h => h.trim().toLowerCase());
-      let startIdx = lines.indexOf(headers) + 1;
-      for (let i = startIdx; i < lines.length; i++) {
-        const row = lines[i].trim();
-        if (!row) continue;
-        const values = row.split(/,|\s{2,}|\t/);
-        if (values.length < headerArr.length) continue;
-        let obj = {};
-        for (let j = 0; j < headerArr.length; j++) {
-          obj[headerArr[j]] = values[j];
+      try {
+        // Parse PDF file
+        const dataBuffer = fs.readFileSync(filePath);
+        const pdfData = await pdfParse(dataBuffer);
+        // Try to extract tables from the text (very basic, expects CSV-like tables)
+        const lines = pdfData.text.split('\n');
+        const headers = lines.find(line => /date/i.test(line) && /symbol/i.test(line));
+        if (!headers) throw new Error('No recognizable table found in PDF');
+        const headerArr = headers.split(/,|\s{2,}|\t/).map(h => h.trim().toLowerCase());
+        let startIdx = lines.indexOf(headers) + 1;
+        for (let i = startIdx; i < lines.length; i++) {
+          const row = lines[i].trim();
+          if (!row) continue;
+          const values = row.split(/,|\s{2,}|\t/);
+          if (values.length < headerArr.length) continue;
+          let obj = {};
+          for (let j = 0; j < headerArr.length; j++) {
+            obj[headerArr[j]] = values[j];
+          }
+          results.push(obj);
         }
-        results.push(obj);
+
+        // Process the trading data with AI analysis
+        const analysisResult = performAIAnalysis(results);
+        const analysisId = Date.now().toString();
+        analysisResults[analysisId] = analysisResult;
+        res.json({
+          success: true,
+          message: 'File uploaded and processed successfully',
+          analysisId: analysisId
+        });
+      } finally {
+        // Clean up uploaded file
+        fs.unlink(filePath, (err) => {
+          if (err) console.error('Error deleting file:', err);
+        });
       }
     } else if (ext === '.doc' || ext === '.docx') {
-      // Parse Word file
-      const dataBuffer = fs.readFileSync(filePath);
-      const mammothResult = await mammoth.extractRawText({ buffer: dataBuffer });
-      const lines = mammothResult.value.split('\n');
-      const headers = lines.find(line => /date/i.test(line) && /symbol/i.test(line));
-      if (!headers) throw new Error('No recognizable table found in Word document');
-      const headerArr = headers.split(/,|\s{2,}|\t/).map(h => h.trim().toLowerCase());
-      let startIdx = lines.indexOf(headers) + 1;
-      for (let i = startIdx; i < lines.length; i++) {
-        const row = lines[i].trim();
-        if (!row) continue;
-        const values = row.split(/,|\s{2,}|\t/);
-        if (values.length < headerArr.length) continue;
-        let obj = {};
-        for (let j = 0; j < headerArr.length; j++) {
-          obj[headerArr[j]] = values[j];
+      try {
+        // Parse Word file
+        const dataBuffer = fs.readFileSync(filePath);
+        const mammothResult = await mammoth.extractRawText({ buffer: dataBuffer });
+        const lines = mammothResult.value.split('\n');
+        const headers = lines.find(line => /date/i.test(line) && /symbol/i.test(line));
+        if (!headers) throw new Error('No recognizable table found in Word document');
+        const headerArr = headers.split(/,|\s{2,}|\t/).map(h => h.trim().toLowerCase());
+        let startIdx = lines.indexOf(headers) + 1;
+        for (let i = startIdx; i < lines.length; i++) {
+          const row = lines[i].trim();
+          if (!row) continue;
+          const values = row.split(/,|\s{2,}|\t/);
+          if (values.length < headerArr.length) continue;
+          let obj = {};
+          for (let j = 0; j < headerArr.length; j++) {
+            obj[headerArr[j]] = values[j];
+          }
+          results.push(obj);
         }
-        results.push(obj);
+
+        // Process the trading data with AI analysis
+        const analysisResult = performAIAnalysis(results);
+        const analysisId = Date.now().toString();
+        analysisResults[analysisId] = analysisResult;
+        res.json({
+          success: true,
+          message: 'File uploaded and processed successfully',
+          analysisId: analysisId
+        });
+      } finally {
+        // Clean up uploaded file
+        fs.unlink(filePath, (err) => {
+          if (err) console.error('Error deleting file:', err);
+        });
       }
     } else {
       throw new Error('Unsupported file type');
     }
-
-    // Process the trading data with AI analysis
-    const analysisResult = performAIAnalysis(results);
-    const analysisId = Date.now().toString();
-    analysisResults[analysisId] = analysisResult;
-    res.json({ 
-      success: true, 
-      message: 'File uploaded and processed successfully',
-      analysisId: analysisId
-    });
   } catch (error) {
     res.status(500).json({ error: error.message });
+    // Clean up uploaded file if exists
+    if (fs.existsSync(req.file.path)) {
+      fs.unlink(req.file.path, (err) => {
+        if (err) console.error('Error deleting file:', err);
+      });
+    }
   }
 });
 
