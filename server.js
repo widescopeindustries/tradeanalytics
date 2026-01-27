@@ -31,21 +31,34 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static('./'));
 
 // Configure multer for file uploads
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    const uploadDir = path.join(__dirname, 'uploads');
-    if (!fs.existsSync(uploadDir)) {
-      fs.mkdirSync(uploadDir);
-    }
-    cb(null, uploadDir);
-  },
-  filename: (req, file, cb) => {
-    cb(null, Date.now() + '-' + file.originalname);
-  }
-});
+// Use memory storage for serverless (Vercel), disk storage for local
+const isServerless = process.env.VERCEL || !process.env.NODE_ENV?.includes('development');
 
-const upload = multer({ 
+let storage;
+if (isServerless) {
+  // Memory storage for serverless environments
+  storage = multer.memoryStorage();
+} else {
+  // Disk storage for local development
+  storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+      const uploadDir = path.join(__dirname, 'uploads');
+      if (!fs.existsSync(uploadDir)) {
+        fs.mkdirSync(uploadDir);
+      }
+      cb(null, uploadDir);
+    },
+    filename: (req, file, cb) => {
+      cb(null, Date.now() + '-' + file.originalname);
+    }
+  });
+}
+
+const upload = multer({
   storage: storage,
+  limits: {
+    fileSize: 10 * 1024 * 1024 // 10MB max file size
+  },
   fileFilter: (req, file, cb) => {
     const allowedTypes = [
       'text/csv',
@@ -73,51 +86,70 @@ app.post('/api/upload', upload.single('tradingData'), async (req, res) => {
       return res.status(400).json({ error: 'No file uploaded' });
     }
 
-    const filePath = req.file.path;
     const ext = path.extname(req.file.originalname).toLowerCase();
     let results = [];
     let responseHandled = false;
 
+    // Get file buffer - either from disk or memory storage
+    const getFileBuffer = async () => {
+      if (req.file.buffer) {
+        // Memory storage (Vercel)
+        return req.file.buffer;
+      } else if (req.file.path) {
+        // Disk storage (local)
+        return fs.readFileSync(req.file.path);
+      }
+      throw new Error('File data not available');
+    };
+
     if (ext === '.csv') {
-      // Parse CSV file
-      fs.createReadStream(filePath)
-        .pipe(csv())
-        .on('data', (data) => results.push(data))
-        .on('end', () => {
-          if (responseHandled) return;
-          responseHandled = true;
-          try {
-            const analysisResult = performAIAnalysis(results);
-            const analysisId = Date.now().toString();
-            analysisResults[analysisId] = analysisResult;
-            res.json({
-              success: true,
-              message: 'File uploaded and processed successfully',
-              analysisId: analysisId
-            });
-          } catch (analysisError) {
-            res.status(500).json({ error: 'Analysis failed: ' + analysisError.message });
-          } finally {
-            // Clean up uploaded file
-            fs.unlink(filePath, (err) => {
-              if (err) console.error('Error deleting file:', err);
-            });
-          }
-        })
-        .on('error', (streamError) => {
-          if (responseHandled) return;
-          responseHandled = true;
-          res.status(400).json({ error: 'Failed to parse CSV: ' + streamError.message });
-          // Clean up uploaded file
-          fs.unlink(filePath, (err) => {
-            if (err) console.error('Error deleting file:', err);
+      try {
+        const buffer = await getFileBuffer();
+        const stream = require('stream').Readable.from(buffer);
+
+        stream
+          .pipe(csv())
+          .on('data', (data) => results.push(data))
+          .on('end', () => {
+            if (responseHandled) return;
+            responseHandled = true;
+            try {
+              const analysisResult = performAIAnalysis(results);
+              const analysisId = Date.now().toString();
+              analysisResults[analysisId] = analysisResult;
+              res.json({
+                success: true,
+                message: 'File uploaded and processed successfully',
+                analysisId: analysisId
+              });
+            } catch (analysisError) {
+              res.status(500).json({ error: 'Analysis failed: ' + analysisError.message });
+            } finally {
+              // Clean up disk file if it exists (not needed for memory storage)
+              if (req.file.path && fs.existsSync(req.file.path)) {
+                fs.unlink(req.file.path, (err) => {
+                  if (err) console.error('Error deleting file:', err);
+                });
+              }
+            }
+          })
+          .on('error', (streamError) => {
+            if (responseHandled) return;
+            responseHandled = true;
+            res.status(400).json({ error: 'Failed to parse CSV: ' + streamError.message });
+            // Clean up disk file if it exists
+            if (req.file.path && fs.existsSync(req.file.path)) {
+              fs.unlink(req.file.path, (err) => {
+                if (err) console.error('Error deleting file:', err);
+              });
+            }
           });
-        });
-      return;
+      } catch (error) {
+        res.status(500).json({ error: error.message });
+      }
     } else if (ext === '.pdf') {
       try {
-        // Parse PDF file
-        const dataBuffer = fs.readFileSync(filePath);
+        const dataBuffer = await getFileBuffer();
         const pdfData = await pdfParse(dataBuffer);
         // Try to extract tables from the text (very basic, expects CSV-like tables)
         const lines = pdfData.text.split('\n');
@@ -146,16 +178,19 @@ app.post('/api/upload', upload.single('tradingData'), async (req, res) => {
           message: 'File uploaded and processed successfully',
           analysisId: analysisId
         });
+      } catch (error) {
+        res.status(500).json({ error: error.message });
       } finally {
-        // Clean up uploaded file
-        fs.unlink(filePath, (err) => {
-          if (err) console.error('Error deleting file:', err);
-        });
+        // Clean up disk file if it exists
+        if (req.file.path && fs.existsSync(req.file.path)) {
+          fs.unlink(req.file.path, (err) => {
+            if (err) console.error('Error deleting file:', err);
+          });
+        }
       }
     } else if (ext === '.doc' || ext === '.docx') {
       try {
-        // Parse Word file
-        const dataBuffer = fs.readFileSync(filePath);
+        const dataBuffer = await getFileBuffer();
         const mammothResult = await mammoth.extractRawText({ buffer: dataBuffer });
         const lines = mammothResult.value.split('\n');
         const headers = lines.find(line => /date/i.test(line) && /symbol/i.test(line));
@@ -183,23 +218,21 @@ app.post('/api/upload', upload.single('tradingData'), async (req, res) => {
           message: 'File uploaded and processed successfully',
           analysisId: analysisId
         });
+      } catch (error) {
+        res.status(500).json({ error: error.message });
       } finally {
-        // Clean up uploaded file
-        fs.unlink(filePath, (err) => {
-          if (err) console.error('Error deleting file:', err);
-        });
+        // Clean up disk file if it exists
+        if (req.file.path && fs.existsSync(req.file.path)) {
+          fs.unlink(req.file.path, (err) => {
+            if (err) console.error('Error deleting file:', err);
+          });
+        }
       }
     } else {
       throw new Error('Unsupported file type');
     }
   } catch (error) {
     res.status(500).json({ error: error.message });
-    // Clean up uploaded file if exists
-    if (fs.existsSync(req.file.path)) {
-      fs.unlink(req.file.path, (err) => {
-        if (err) console.error('Error deleting file:', err);
-      });
-    }
   }
 });
 
