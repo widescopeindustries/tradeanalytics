@@ -1,13 +1,14 @@
 require('dotenv').config();
 const Stripe = require('stripe');
 
-// Validate Stripe configuration
-if (!process.env.STRIPE_SECRET_KEY) {
-  console.error('Error: STRIPE_SECRET_KEY is not set in environment variables');
-  process.exit(1);
+// Stripe is optional - only needed for API checkout (we use Payment Links instead)
+let stripe = null;
+if (process.env.STRIPE_SECRET_KEY) {
+  stripe = Stripe(process.env.STRIPE_SECRET_KEY);
+} else {
+  console.warn('Warning: STRIPE_SECRET_KEY not set. Stripe API features disabled (Payment Links still work).');
 }
 
-const stripe = Stripe(process.env.STRIPE_SECRET_KEY);
 const express = require('express');
 const cors = require('cors');
 const multer = require('multer');
