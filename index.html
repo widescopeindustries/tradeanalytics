@@ -101,7 +101,7 @@
                             <li>One-time, in-depth AI analysis</li>
                             <li>PDF download of your report</li>
                         </ul>
-                        <a href="#" class="cta-button primary-cta" id="buy-report-btn">Buy Report</a>
+                        <a href="https://buy.stripe.com/8x27sL0vT9mC8i45RB18c03" class="cta-button primary-cta" target="_blank">Buy Report - $20</a>
                     </div>
                     <div class="price-card">
                         <h3>Unlimited Reports</h3>
@@ -110,7 +110,7 @@
                             <li>Unlimited AI-powered reports</li>
                             <li>Priority support</li>
                         </ul>
-                        <a href="#" class="cta-button secondary-cta" id="subscribe-btn">Subscribe Monthly</a>
+                        <a href="#" class="cta-button secondary-cta" style="opacity: 0.5; cursor: not-allowed;" onclick="alert('Subscription coming soon!'); return false;">Subscribe Monthly - Coming Soon</a>
                     </div>
                 </div>
             </div>
@@ -361,38 +361,6 @@
     </footer>
 
     <script src="script.js"></script>
-    <script>
-    // Stripe Checkout button logic
-    const buyReportBtn = document.getElementById('buy-report-btn');
-    if (buyReportBtn) {
-      buyReportBtn.addEventListener('click', async (e) => {
-        e.preventDefault();
-        buyReportBtn.textContent = 'Redirecting...';
-        try {
-          const res = await fetch('/api/create-checkout-session/report', { method: 'POST' });
-          const data = await res.json();
-          if (data.url) window.location = data.url;
-          else alert(data.error || 'Payment error.');
-        } catch (err) {
-          alert('Could not start payment.');
-        }
-      });
-    }
-    const subscribeBtn = document.getElementById('subscribe-btn');
-    if (subscribeBtn) {
-      subscribeBtn.addEventListener('click', async (e) => {
-        e.preventDefault();
-        subscribeBtn.textContent = 'Redirecting...';
-        try {
-          const res = await fetch('/api/create-checkout-session/subscription', { method: 'POST' });
-          const data = await res.json();
-          if (data.url) window.location = data.url;
-          else alert(data.error || 'Payment error.');
-        } catch (err) {
-          alert('Could not start payment.');
-        }
-      });
-    }
-    </script>
+    <!-- Payment links now go directly to Stripe Payment Links - no JS needed -->
 </body>
 </html>
