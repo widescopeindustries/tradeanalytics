@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trading Analytics Blog - Tips, Strategies & Insights | TradeAnalyticsAI</title>
+    <meta name="description" content="Expert trading analysis tips, performance optimization strategies, and insights to help you become a more profitable trader.">
+    <link rel="stylesheet" href="../style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .blog-hero {
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+            padding: 80px 0 60px;
+            text-align: center;
+            color: #fff;
+        }
+        .blog-hero h1 {
+            font-size: 2.5rem;
+            margin-bottom: 16px;
+        }
+        .blog-hero p {
+            color: #94a3b8;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        .blog-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 32px;
+            padding: 60px 0;
+        }
+        .blog-card {
+            background: #fff;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .blog-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 30px rgba(0,0,0,0.12);
+        }
+        .blog-card-image {
+            height: 180px;
+            background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .blog-card-image i {
+            font-size: 3rem;
+            color: rgba(255,255,255,0.9);
+        }
+        .blog-card-content {
+            padding: 24px;
+        }
+        .blog-card-content h2 {
+            font-size: 1.25rem;
+            margin-bottom: 12px;
+            color: #1e293b;
+        }
+        .blog-card-content h2 a {
+            color: inherit;
+            text-decoration: none;
+        }
+        .blog-card-content h2 a:hover {
+            color: #2563eb;
+        }
+        .blog-card-content p {
+            color: #64748b;
+            font-size: 0.95rem;
+            line-height: 1.6;
+            margin-bottom: 16px;
+        }
+        .blog-card-meta {
+            font-size: 0.85rem;
+            color: #94a3b8;
+        }
+        .blog-card-tag {
+            display: inline-block;
+            background: #e0f2fe;
+            color: #0369a1;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            margin-right: 8px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+            <div class="container">
+                <a href="/" class="logo">TradeAnalyticsAI</a>
+                <ul class="nav-links">
+                    <li><a href="/#features">Features</a></li>
+                    <li><a href="/#how-it-works">How It Works</a></li>
+                    <li><a href="/#pricing">Pricing</a></li>
+                    <li><a href="/blog/" class="active">Blog</a></li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <section class="blog-hero">
+            <div class="container">
+                <h1>Trading Analytics Blog</h1>
+                <p>Expert insights, trading psychology tips, and data-driven strategies to improve your trading performance.</p>
+            </div>
+        </section>
+
+        <section class="container">
+            <div class="blog-grid" id="blog-posts">
+                <!-- Posts will be dynamically loaded or statically listed here -->
+                
+                <article class="blog-card">
+                    <div class="blog-card-image" style="background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);">
+                        <i class="fas fa-brain"></i>
+                    </div>
+                    <div class="blog-card-content">
+                        <h2><a href="why-am-i-losing-money-trading.html">Why Am I Losing Money Trading? 7 Data-Driven Answers</a></h2>
+                        <p>Most traders lose money for predictable, fixable reasons. Here's what the data actually shows about common trading mistakes.</p>
+                        <div class="blog-card-meta">
+                            <span class="blog-card-tag">Trading Psychology</span>
+                            Jan 29, 2026
+                        </div>
+                    </div>
+                </article>
+
+                <article class="blog-card">
+                    <div class="blog-card-image" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%);">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <div class="blog-card-content">
+                        <h2><a href="how-to-calculate-profit-factor.html">How to Calculate Profit Factor (And Why It Matters More Than Win Rate)</a></h2>
+                        <p>Win rate is overrated. Learn why profit factor is the metric that actually predicts trading success.</p>
+                        <div class="blog-card-meta">
+                            <span class="blog-card-tag">Trading Metrics</span>
+                            Jan 29, 2026
+                        </div>
+                    </div>
+                </article>
+
+                <article class="blog-card">
+                    <div class="blog-card-image" style="background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <div class="blog-card-content">
+                        <h2><a href="best-time-of-day-to-trade.html">Best Time of Day to Trade: What Your Data Should Tell You</a></h2>
+                        <p>Stop guessing. Here's how to use your own trading data to find your most profitable hours.</p>
+                        <div class="blog-card-meta">
+                            <span class="blog-card-tag">Strategy</span>
+                            Jan 29, 2026
+                        </div>
+                    </div>
+                </article>
+
+                <article class="blog-card">
+                    <div class="blog-card-image" style="background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);">
+                        <i class="fas fa-exclamation-triangle"></i>
+                    </div>
+                    <div class="blog-card-content">
+                        <h2><a href="am-i-overtrading.html">Am I Overtrading? 5 Signs You're Taking Too Many Trades</a></h2>
+                        <p>Overtrading is the silent killer of trading accounts. Here's how to diagnose it in your own data.</p>
+                        <div class="blog-card-meta">
+                            <span class="blog-card-tag">Trading Psychology</span>
+                            Jan 29, 2026
+                        </div>
+                    </div>
+                </article>
+
+                <article class="blog-card">
+                    <div class="blog-card-image" style="background: linear-gradient(135deg, #06b6d4 0%, #0891b2 100%);">
+                        <i class="fas fa-calculator"></i>
+                    </div>
+                    <div class="blog-card-content">
+                        <h2><a href="trading-expectancy-formula.html">Trading Expectancy Formula: Calculate Your True Edge</a></h2>
+                        <p>Expectancy tells you how much you can expect to make per trade. Here's how to calculate it and what good looks like.</p>
+                        <div class="blog-card-meta">
+                            <span class="blog-card-tag">Trading Metrics</span>
+                            Jan 29, 2026
+                        </div>
+                    </div>
+                </article>
+
+                <article class="blog-card">
+                    <div class="blog-card-image" style="background: linear-gradient(135deg, #ec4899 0%, #db2777 100%);">
+                        <i class="fas fa-file-csv"></i>
+                    </div>
+                    <div class="blog-card-content">
+                        <h2><a href="how-to-export-trades-from-webull.html">How to Export Your Trades from Webull for Analysis</a></h2>
+                        <p>Step-by-step guide to exporting your Webull trade history so you can analyze your performance.</p>
+                        <div class="blog-card-meta">
+                            <span class="blog-card-tag">How-To</span>
+                            Jan 29, 2026
+                        </div>
+                    </div>
+                </article>
+
+            </div>
+        </section>
+
+        <section style="background: #f8fafc; padding: 60px 0; text-align: center;">
+            <div class="container">
+                <h2 style="margin-bottom: 16px;">Ready to Analyze Your Trading?</h2>
+                <p style="color: #64748b; margin-bottom: 24px;">Get AI-powered insights into your trading performance.</p>
+                <a href="/#pricing" class="cta-button primary-cta">Get Your Report</a>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2026 TradeAnalyticsAI. All Rights Reserved.</p>
+            <ul class="footer-links">
+                <li><a href="#">Privacy Policy</a></li>
+                <li><a href="#">Terms of Service</a></li>
+                <li><a href="#">Contact Us</a></li>
+            </ul>
+        </div>
+    </footer>
+</body>
+</html>
