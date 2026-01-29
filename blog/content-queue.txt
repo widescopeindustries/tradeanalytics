@@ -1,0 +1,62 @@
+# TradeAnalyticsAI Blog Content Queue
+# One keyword per line - the cron job will use these to generate posts
+
+# Trading Psychology
+trading psychology patterns
+how to stop revenge trading
+fear of missing out trading
+trading discipline tips
+emotional trading mistakes
+
+# Trading Metrics
+sharpe ratio trading explained
+max drawdown calculator
+risk of ruin trading
+average true range trading
+position sizing calculator
+
+# Strategy / Analysis
+trading journal template
+how to review trading journal
+find your trading edge
+trading pattern recognition
+backtesting trading strategy
+
+# Broker-Specific (SEO gold)
+thinkorswim export trades csv
+robinhood trade history export
+td ameritrade trade export
+interactive brokers export trades
+fidelity trade history download
+etrade export trades
+
+# Pain Points
+why do most traders fail
+trading mistakes to avoid
+how to recover from trading losses
+trading slump how to fix
+blown trading account recovery
+
+# Comparisons
+trading journal software comparison
+tradervue vs tradezella
+excel trading journal vs app
+free vs paid trading journal
+
+# Time-Based
+best day of week to trade
+worst trading days to avoid
+trading around fed announcements
+earnings season trading strategy
+
+# Options Specific
+options trading win rate
+options profit factor
+wheel strategy performance tracking
+covered call tracking spreadsheet
+
+# Beginner
+trading terms explained
+what is a pip in trading
+lot size explained forex
+how to start a trading journal
