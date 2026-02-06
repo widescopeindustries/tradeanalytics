@@ -1,55 +1,129 @@
 document.addEventListener('DOMContentLoaded', () => {
+
+    // =========================================
+    // Scroll Progress Bar
+    // =========================================
+    const progressBar = document.querySelector('.scroll-progress');
+    if (progressBar) {
+        window.addEventListener('scroll', () => {
+            const scrollTop = document.documentElement.scrollTop;
+            const scrollHeight = document.documentElement.scrollHeight - window.innerHeight;
+            const progress = scrollHeight > 0 ? (scrollTop / scrollHeight) * 100 : 0;
+            progressBar.style.width = progress + '%';
+        }, { passive: true });
+    }
+
+
+    // =========================================
+    // Scroll Reveal (IntersectionObserver)
+    // =========================================
+    const revealElements = document.querySelectorAll('.reveal-on-scroll');
+    if (revealElements.length > 0 && 'IntersectionObserver' in window) {
+        const revealObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('revealed');
+                    revealObserver.unobserve(entry.target);
+                }
+            });
+        }, {
+            threshold: 0.1,
+            rootMargin: '0px 0px -40px 0px'
+        });
+
+        revealElements.forEach(el => revealObserver.observe(el));
+    } else {
+        // Fallback: just show everything
+        revealElements.forEach(el => el.classList.add('revealed'));
+    }
+
+
+    // =========================================
+    // Navbar scroll effect
+    // =========================================
+    const navbar = document.querySelector('.navbar');
+    if (navbar) {
+        let lastScroll = 0;
+        window.addEventListener('scroll', () => {
+            const currentScroll = window.pageYOffset;
+            // Add a subtle background change when scrolled
+            if (currentScroll > 50) {
+                navbar.style.background = 'rgba(15, 22, 41, 0.95)';
+                navbar.style.boxShadow = '0 8px 32px rgba(0, 0, 0, 0.6)';
+            } else {
+                navbar.style.background = 'rgba(15, 22, 41, 0.8)';
+                navbar.style.boxShadow = '0 8px 32px rgba(0, 0, 0, 0.4)';
+            }
+            lastScroll = currentScroll;
+        }, { passive: true });
+    }
+
+
+    // =========================================
+    // Hamburger Menu
+    // =========================================
     const hamburgerButton = document.getElementById('hamburger-button');
     const mobileMenu = document.getElementById('mobile-menu-nav');
 
     if (hamburgerButton && mobileMenu) {
         hamburgerButton.addEventListener('click', () => {
             mobileMenu.classList.toggle('active');
-            hamburgerButton.classList.toggle('active'); // Toggle animation class on button
+            hamburgerButton.classList.toggle('active');
         });
 
-        // Optional: Close mobile menu when a link is clicked
+        // Close mobile menu when a link is clicked
         const mobileLinks = mobileMenu.querySelectorAll('a');
         mobileLinks.forEach(link => {
             link.addEventListener('click', () => {
-                 mobileMenu.classList.remove('active');
-                 hamburgerButton.classList.remove('active');
+                mobileMenu.classList.remove('active');
+                hamburgerButton.classList.remove('active');
             });
         });
 
-        // Optional: Close mobile menu if clicked outside
-         document.addEventListener('click', (event) => {
+        // Close mobile menu if clicked outside
+        document.addEventListener('click', (event) => {
             const isClickInsideMenu = mobileMenu.contains(event.target);
             const isClickOnHamburger = hamburgerButton.contains(event.target);
 
             if (!isClickInsideMenu && !isClickOnHamburger && mobileMenu.classList.contains('active')) {
-                 mobileMenu.classList.remove('active');
-                 hamburgerButton.classList.remove('active');
+                mobileMenu.classList.remove('active');
+                hamburgerButton.classList.remove('active');
             }
         });
     }
 
-    // Smooth scrolling for anchor links (Optional but nice)
+
+    // =========================================
+    // Smooth scrolling for anchor links
+    // =========================================
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         anchor.addEventListener('click', function (e) {
-            // Check if it's just a hash link and not part of the mobile menu toggle logic
-            if (this.getAttribute('href') !== '#' && document.querySelector(this.getAttribute('href'))) {
+            const href = this.getAttribute('href');
+            if (href !== '#' && document.querySelector(href)) {
                 e.preventDefault();
-
-                const targetElement = document.querySelector(this.getAttribute('href'));
-                const headerOffset = 70; // Adjust based on your fixed header height
+                const targetElement = document.querySelector(href);
+                const headerOffset = 80;
                 const elementPosition = targetElement.getBoundingClientRect().top;
                 const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
 
                 window.scrollTo({
                     top: offsetPosition,
-                    behavior: "smooth"
+                    behavior: 'smooth'
                 });
+
+                // Close mobile menu if open
+                if (mobileMenu && mobileMenu.classList.contains('active')) {
+                    mobileMenu.classList.remove('active');
+                    hamburgerButton.classList.remove('active');
+                }
             }
         });
     });
 
+
+    // =========================================
     // Tab switching for analysis tool
+    // =========================================
     const toolTabs = document.querySelectorAll('.tool-tab');
     const toolPanes = document.querySelectorAll('.tool-pane');
     toolTabs.forEach(btn => {
@@ -58,11 +132,15 @@ document.addEventListener('DOMContentLoaded', () => {
             toolPanes.forEach(pane => pane.classList.remove('active'));
             btn.classList.add('active');
             const tool = btn.getAttribute('data-tool');
-            document.getElementById(tool + '-pane').classList.add('active');
+            const pane = document.getElementById(tool + '-pane');
+            if (pane) pane.classList.add('active');
         });
     });
 
+
+    // =========================================
     // Tab switching for results
+    // =========================================
     const tabButtons = document.querySelectorAll('.nav-button');
     const resultSections = document.querySelectorAll('.result-section');
     tabButtons.forEach(btn => {
@@ -71,11 +149,15 @@ document.addEventListener('DOMContentLoaded', () => {
             resultSections.forEach(section => section.classList.remove('active'));
             btn.classList.add('active');
             const section = btn.getAttribute('data-section');
-            document.getElementById(section + '-section').classList.add('active');
+            const el = document.getElementById(section + '-section');
+            if (el) el.classList.add('active');
         });
     });
 
+
+    // =========================================
     // Upload form logic
+    // =========================================
     const uploadForm = document.getElementById('upload-form');
     if (uploadForm) {
         uploadForm.addEventListener('submit', async (e) => {
@@ -104,7 +186,10 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+
+    // =========================================
     // Manual entry form logic
+    // =========================================
     const manualForm = document.getElementById('manual-form');
     if (manualForm) {
         manualForm.addEventListener('submit', async (e) => {
@@ -138,7 +223,10 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Add another trade entry logic
+
+    // =========================================
+    // Add another trade entry
+    // =========================================
     const addTradeBtn = document.getElementById('add-trade');
     if (addTradeBtn) {
         addTradeBtn.addEventListener('click', () => {
@@ -161,7 +249,10 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+
+    // =========================================
     // Fetch and display analysis results
+    // =========================================
     async function fetchAndDisplayResults(analysisId) {
         try {
             const response = await fetch(`/api/analysis/${analysisId}`);
@@ -176,12 +267,16 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+
+    // =========================================
     // Show and fill the results section
+    // =========================================
     function showResultsSection(analysis) {
         const resultsSection = document.getElementById('analysis-results');
         if (!resultsSection) return;
         resultsSection.classList.remove('hidden');
         resultsSection.scrollIntoView({ behavior: 'smooth' });
+
         // Fill summary metrics
         document.getElementById('total-trades').textContent = analysis.summary.totalTrades;
         document.getElementById('win-rate').textContent = (analysis.summary.winRate || 0).toFixed(2) + '%';
@@ -242,7 +337,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const el = document.getElementById(elementId);
         if (!el) return;
         el.innerHTML = '';
-        if (patterns && typeof patterns === 'object') {
+        if (patterns && typeof patterns === 'object' && !Array.isArray(patterns)) {
             Object.entries(patterns).forEach(([key, value]) => {
                 const div = document.createElement('div');
                 div.className = 'pattern-item';

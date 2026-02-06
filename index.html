@@ -7,19 +7,22 @@
     <link rel="stylesheet" href="style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
 
+    <div class="scroll-progress"></div>
+
     <header>
         <nav class="navbar">
             <div class="container">
-                <a href="#" class="logo">TradeAnalyticsAI</a>
+                <a href="#" class="logo">TradeAnalytics<span class="gradient-text">AI</span></a>
                 <ul class="nav-links">
                     <li><a href="#features">Features</a></li>
                     <li><a href="#how-it-works">How It Works</a></li>
                     <li><a href="#pricing">Pricing</a></li>
+                    <li><a href="#pricing" class="nav-cta">Get Started</a></li>
                 </ul>
                 <button class="hamburger" id="hamburger-button">
                     <span></span>
@@ -29,36 +32,48 @@
             </div>
         </nav>
         <div class="mobile-menu" id="mobile-menu-nav">
-             <a href="#pricing">Pricing</a>
+            <a href="#features">Features</a>
+            <a href="#how-it-works">How It Works</a>
+            <a href="#pricing">Pricing</a>
         </div>
     </header>
 
     <main>
         <section class="hero">
             <div class="container">
-                <h1>Unlock Peak Trading Performance with AI</h1>
+                <div class="social-proof">
+                    <i class="fas fa-chart-line"></i>
+                    Trusted by 500+ traders worldwide
+                </div>
+                <h1>Unlock Peak Trading Performance with <span class="gradient-text">AI</span></h1>
                 <p>Analyze your trades, discover hidden patterns, and get actionable insights powered by artificial intelligence.</p>
-                <a href="#pricing" class="cta-button hero-cta">Purchase Report</a>
-                 <p class="disclaimer">*Trading involves risk. Past performance is not indicative of future results. TradeAnalyticsAI provides analysis tools, not financial advice.*</p>
+                <a href="#pricing" class="cta-button hero-cta">Get Your AI Analysis</a>
+                <p class="disclaimer">*Trading involves risk. Past performance is not indicative of future results. TradeAnalyticsAI provides analysis tools, not financial advice.*</p>
             </div>
         </section>
 
         <section id="features" class="features">
             <div class="container">
-                <h2>Why Choose TradeAnalyticsAI?</h2>
+                <h2>Why Choose TradeAnalytics<span class="gradient-text">AI</span>?</h2>
                 <div class="feature-grid">
-                    <div class="feature-item">
-                        <i class="fas fa-chart-line feature-icon"></i>
+                    <div class="feature-item reveal-on-scroll">
+                        <div class="feature-icon">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
                         <h3>Deep Performance Analysis</h3>
                         <p>Go beyond basic metrics. Understand your edge, risk exposure, and psychological patterns.</p>
                     </div>
-                    <div class="feature-item">
-                        <i class="fas fa-robot feature-icon"></i>
+                    <div class="feature-item reveal-on-scroll">
+                        <div class="feature-icon">
+                            <i class="fas fa-robot"></i>
+                        </div>
                         <h3>AI-Driven Insights</h3>
                         <p>Our algorithms scan your history to find correlations and insights you might miss.</p>
                     </div>
-                    <div class="feature-item">
-                        <i class="fas fa-shield-alt feature-icon"></i>
+                    <div class="feature-item reveal-on-scroll">
+                        <div class="feature-icon">
+                            <i class="fas fa-shield-alt"></i>
+                        </div>
                         <h3>Secure Data Handling</h3>
                         <p>Bank-level security to protect your sensitive trading data.</p>
                     </div>
@@ -70,17 +85,17 @@
             <div class="container">
                 <h2>How It Works in 3 Simple Steps</h2>
                 <div class="steps-container">
-                    <div class="step">
+                    <div class="step reveal-on-scroll">
                         <div class="step-number">1</div>
                         <h3>Connect or Upload</h3>
                         <p>Securely link your broker or upload your trade history CSV.</p>
                     </div>
-                    <div class="step">
+                    <div class="step reveal-on-scroll">
                         <div class="step-number">2</div>
                         <h3>AI Analysis</h3>
                         <p>Our engine processes your data, identifying key patterns and metrics.</p>
                     </div>
-                    <div class="step">
+                    <div class="step reveal-on-scroll">
                         <div class="step-number">3</div>
                         <h3>Get Insights</h3>
                         <p>Explore interactive dashboards and actionable reports to improve.</p>
@@ -91,96 +106,99 @@
 
         <section id="pricing" class="pricing">
             <div class="container">
-                <h2>Simple Pricing</h2>
+                <h2>Simple, Transparent Pricing</h2>
                 <p>Purchase a detailed AI-powered trading report for <strong>$20 per report</strong> or get <strong>unlimited reports for $100/month</strong>.</p>
-                <div class="pricing-grid single-tier">
-                    <div class="price-card">
+                <div class="pricing-grid">
+                    <div class="price-card reveal-on-scroll">
                         <h3>Pay Per Report</h3>
                         <p class="price"><span>$20</span> per report</p>
                         <ul>
                             <li>One-time, in-depth AI analysis</li>
                             <li>PDF download of your report</li>
                         </ul>
-                        <a href="https://buy.stripe.com/8x27sL0vT9mC8i45RB18c03" class="cta-button primary-cta" target="_blank">Buy Report - $20</a>
+                        <a href="https://buy.stripe.com/8x27sL0vT9mC8i45RB18c03" class="cta-button" target="_blank">Buy Report - $20</a>
                     </div>
-                    <div class="price-card">
+                    <div class="price-card popular reveal-on-scroll">
                         <h3>Unlimited Reports</h3>
                         <p class="price"><span>$100</span> per month</p>
                         <ul>
                             <li>Unlimited AI-powered reports</li>
                             <li>Priority support</li>
                         </ul>
-                        <a href="https://buy.stripe.com/3cs2av8stgVseSkfZ0" class="cta-button secondary-cta" target="_blank">Subscribe Monthly - $100/mo</a>
+                        <a href="https://buy.stripe.com/3cs2av8stgVseSkfZ0" class="cta-button" target="_blank">Subscribe - $100/mo</a>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- Example Report Section (replaces AI Analysis Tool) -->
-        <section id="example-report" class="example-report" style="background: #f8fafc; padding: 48px 0;">
+        <!-- Example Report Section -->
+        <section id="example-report" class="example-report">
             <div class="container">
-                <h2 style="text-align:center; font-size:2.2rem; margin-bottom: 12px;">Example AI Trading Report</h2>
-                <p style="text-align:center; color:#555; margin-bottom: 32px;">See what you get! Here's a sample of the detailed, actionable insights you'll receive in your AI-powered trading report:</p>
-                <div class="report-preview" style="max-width: 700px; margin: 0 auto; background: #fff; border-radius: 16px; box-shadow: 0 4px 24px rgba(0,0,0,0.07); padding: 32px 28px;">
-                    <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 18px;">
-                        <i class="fas fa-chart-bar" style="font-size: 1.5rem; color: #2563eb;"></i>
-                        <h3 style="margin:0; font-size:1.3rem; color:#222;">Performance Summary</h3>
+                <h2>Example <span class="gradient-text">AI</span> Trading Report</h2>
+                <p class="section-subtitle">See what you get! Here's a sample of the detailed, actionable insights you'll receive in your AI-powered trading report:</p>
+                <div class="report-preview reveal-on-scroll">
+                    <div class="report-section-header">
+                        <i class="fas fa-chart-bar"></i>
+                        <h3>Performance Summary</h3>
                     </div>
-                    <div style="display: flex; flex-wrap: wrap; gap: 18px 32px; margin-bottom: 24px;">
-                        <div style="flex:1 1 120px; background:#f1f5f9; border-radius:8px; padding:16px; text-align:center;">
-                            <div style="font-size:1.5rem; font-weight:700; color:#2563eb;">120</div>
-                            <div style="font-size:0.98rem; color:#555;">Total Trades</div>
+                    <div class="report-metrics-row">
+                        <div class="report-metric">
+                            <span class="value color-cyan">120</span>
+                            <span class="label">Total Trades</span>
                         </div>
-                        <div style="flex:1 1 120px; background:#f1f5f9; border-radius:8px; padding:16px; text-align:center;">
-                            <div style="font-size:1.5rem; font-weight:700; color:#16a34a;">54.2%</div>
-                            <div style="font-size:0.98rem; color:#555;">Win Rate</div>
+                        <div class="report-metric">
+                            <span class="value color-emerald">54.2%</span>
+                            <span class="label">Win Rate</span>
                         </div>
-                        <div style="flex:1 1 120px; background:#f1f5f9; border-radius:8px; padding:16px; text-align:center;">
-                            <div style="font-size:1.5rem; font-weight:700; color:#f59e42;">1.87</div>
-                            <div style="font-size:0.98rem; color:#555;">Profit Factor</div>
+                        <div class="report-metric">
+                            <span class="value color-gold">1.87</span>
+                            <span class="label">Profit Factor</span>
                         </div>
-                        <div style="flex:1 1 120px; background:#f1f5f9; border-radius:8px; padding:16px; text-align:center;">
-                            <div style="font-size:1.5rem; font-weight:700; color:#0ea5e9;">$45.20</div>
-                            <div style="font-size:0.98rem; color:#555;">Expectancy</div>
+                        <div class="report-metric">
+                            <span class="value color-blue">$45.20</span>
+                            <span class="label">Expectancy</span>
                         </div>
-                        <div style="flex:1 1 120px; background:#f1f5f9; border-radius:8px; padding:16px; text-align:center;">
-                            <div style="font-size:1.5rem; font-weight:700; color:#ef4444;">8.5%</div>
-                            <div style="font-size:0.98rem; color:#555;">Max Drawdown</div>
+                        <div class="report-metric">
+                            <span class="value color-crimson">8.5%</span>
+                            <span class="label">Max Drawdown</span>
                         </div>
                     </div>
-                    <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 10px; margin-top: 18px;">
-                        <i class="fas fa-lightbulb" style="font-size: 1.3rem; color: #f59e42;"></i>
-                        <h3 style="margin:0; font-size:1.15rem; color:#222;">Key Insights</h3>
+
+                    <div class="report-section-header">
+                        <i class="fas fa-lightbulb"></i>
+                        <h3>Key Insights</h3>
                     </div>
-                    <ul style="margin-bottom: 20px; padding-left: 24px; color:#333;">
-                        <li><strong>Morning trades</strong> (9:30-11:00 AM) have a <span style="color:#16a34a; font-weight:600;">68% win rate</span> and higher average profit.</li>
+                    <ul class="insight-list">
+                        <li><strong>Morning trades</strong> (9:30-11:00 AM) have a <span class="highlight-green">68% win rate</span> and higher average profit.</li>
                         <li><strong>Consistent overtrading</strong> on Fridays leads to lower performance.</li>
                         <li><strong>Best results</strong> when trading with the trend; counter-trend trades underperform.</li>
-                        <li><strong>Risk of ruin:</strong> <span style="color:#16a34a; font-weight:600;">Low</span>. Position sizing is generally consistent.</li>
+                        <li><strong>Risk of ruin:</strong> <span class="highlight-green">Low</span>. Position sizing is generally consistent.</li>
                     </ul>
-                    <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 10px; margin-top: 18px;">
-                        <i class="fas fa-arrow-up-right-dots" style="font-size: 1.3rem; color: #2563eb;"></i>
-                        <h3 style="margin:0; font-size:1.15rem; color:#222;">Improvement Suggestions</h3>
+
+                    <div class="report-section-header">
+                        <i class="fas fa-arrow-up-right-dots"></i>
+                        <h3>Improvement Suggestions</h3>
                     </div>
-                    <ul style="margin-bottom: 24px; padding-left: 24px; color:#333;">
+                    <ul class="suggestion-list">
                         <li>Focus trading activity during your most profitable hours.</li>
                         <li>Limit number of trades on Fridays to avoid overtrading.</li>
                         <li>Continue to refine entry criteria for counter-trend setups.</li>
                     </ul>
-                    <div class="example-report-image" style="text-align:center;">
-                        <img src="images/sample-report-chart.png" alt="Sample Report Chart" style="max-width: 100%; border: 1px solid #eee; border-radius: 8px; margin-top: 16px; box-shadow:0 2px 8px rgba(0,0,0,0.04);">
-                        <div style="font-size:0.95rem; color:#888; margin-top:8px;">Sample equity curve and performance chart</div>
+
+                    <div class="report-chart-area">
+                        <img src="images/sample-report-chart.png" alt="Sample Report Chart">
+                        <div class="chart-caption">Sample equity curve and performance chart</div>
                     </div>
                 </div>
             </div>
         </section>
 
         <!-- AI Analysis Tool Section -->
-        <section id="analysis-tool" class="analysis-tool" style="background: #f8fafc; padding: 48px 0;">
+        <section id="analysis-tool" class="analysis-tool">
             <div class="container">
-                <h2 style="text-align:center; font-size:2.2rem; margin-bottom: 12px;">Try the AI Analysis Tool</h2>
-                <p style="text-align:center; color:#555; margin-bottom: 32px;">Upload your trading data or enter trades manually to get a free sample analysis.</p>
-                <div class="tool-tabs" style="display: flex; justify-content: center; margin-bottom: 32px;">
+                <h2>Try the <span class="gradient-text">AI</span> Analysis Tool</h2>
+                <p class="section-subtitle">Upload your trading data or enter trades manually to get a free sample analysis.</p>
+                <div class="tool-tabs">
                     <button class="tool-tab active" data-tool="upload">Upload File</button>
                     <button class="tool-tab" data-tool="manual">Manual Entry</button>
                 </div>
@@ -188,31 +206,35 @@
                     <!-- Upload Form -->
                     <div class="tool-pane active" id="upload-pane">
                         <form id="upload-form" enctype="multipart/form-data">
-                            <div style="text-align: center; margin-bottom: 24px;">
-                                <input type="file" id="csv-file" accept=".csv,.pdf,.doc,.docx" style="display: block; margin: 0 auto 16px; padding: 8px;">
-                                <small style="color:#666;">Supported formats: CSV, PDF, Word (.doc, .docx)</small>
+                            <div class="upload-area">
+                                <input type="file" id="csv-file" accept=".csv,.pdf,.doc,.docx">
+                                <p class="file-hint">Supported formats: CSV, PDF, Word (.doc, .docx)</p>
                             </div>
-                            <button type="submit" class="cta-button primary-cta" style="display: block; margin: 0 auto;">Analyze Trades</button>
+                            <div style="text-align: center;">
+                                <button type="submit" class="cta-button">Analyze Trades</button>
+                            </div>
                         </form>
                     </div>
                     <!-- Manual Entry Form -->
                     <div class="tool-pane" id="manual-pane">
                         <form id="manual-form">
                             <div id="trade-entries">
-                                <div class="trade-entry" style="display: flex; gap: 10px; margin-bottom: 10px; align-items: center;">
-                                    <input type="date" name="date" placeholder="Date" required style="flex:1; padding:8px;">
-                                    <input type="text" name="symbol" placeholder="Symbol" required style="flex:1; padding:8px;">
-                                    <select name="side" style="flex:0.5; padding:8px;">
+                                <div class="trade-entry">
+                                    <input type="date" name="date" placeholder="Date" required>
+                                    <input type="text" name="symbol" placeholder="Symbol" required>
+                                    <select name="side">
                                         <option value="buy">Buy</option>
                                         <option value="sell">Sell</option>
                                     </select>
-                                    <input type="number" name="price" placeholder="Price" step="0.01" required style="flex:1; padding:8px;">
-                                    <input type="number" name="size" placeholder="Size" step="0.01" required style="flex:0.8; padding:8px;">
-                                    <input type="number" name="profit" placeholder="Profit/Loss" step="0.01" required style="flex:1; padding:8px;">
+                                    <input type="number" name="price" placeholder="Price" step="0.01" required>
+                                    <input type="number" name="size" placeholder="Size" step="0.01" required>
+                                    <input type="number" name="profit" placeholder="Profit/Loss" step="0.01" required>
                                 </div>
                             </div>
-                            <button type="button" id="add-trade" class="cta-button secondary-cta" style="margin-right: 16px;">Add Another Trade</button>
-                            <button type="submit" class="cta-button primary-cta">Analyze Trades</button>
+                            <div style="display: flex; gap: 12px; flex-wrap: wrap; margin-top: 16px;">
+                                <button type="button" id="add-trade" class="cta-button secondary-cta">Add Another Trade</button>
+                                <button type="submit" class="cta-button">Analyze Trades</button>
+                            </div>
                         </form>
                     </div>
                 </div>
@@ -230,7 +252,7 @@
                     <button class="nav-button" data-section="insights">Insights</button>
                     <button class="nav-button" data-section="risk">Risk Profile</button>
                 </div>
-                
+
                 <div class="results-container">
                     <!-- Summary Section -->
                     <div class="result-section active" id="summary-section">
@@ -254,21 +276,19 @@
                             </div>
                         </div>
                         <div id="chart-container" class="chart-container">
-                            <!-- Charts will be inserted here -->
                             <div class="chart-placeholder">
                                 <p>Charts will appear here after analysis</p>
                             </div>
                         </div>
                     </div>
-                    
+
                     <!-- Detailed Metrics Section -->
                     <div class="result-section" id="metrics-section">
                         <h3>Detailed Metrics</h3>
                         <div class="metrics-grid">
-                            <!-- This will be populated by JavaScript -->
                         </div>
                     </div>
-                    
+
                     <!-- Patterns Section -->
                     <div class="result-section" id="patterns-section">
                         <h3>Trading Patterns</h3>
@@ -276,32 +296,28 @@
                             <div class="pattern-group">
                                 <h4>Time-Based Patterns</h4>
                                 <div id="time-patterns" class="pattern-list">
-                                    <!-- Will be populated by JavaScript -->
                                 </div>
                             </div>
                             <div class="pattern-group">
                                 <h4>Market Condition Patterns</h4>
                                 <div id="market-patterns" class="pattern-list">
-                                    <!-- Will be populated by JavaScript -->
                                 </div>
                             </div>
                             <div class="pattern-group">
                                 <h4>Psychological Patterns</h4>
                                 <div id="psychological-patterns" class="pattern-list">
-                                    <!-- Will be populated by JavaScript -->
                                 </div>
                             </div>
                         </div>
                     </div>
-                    
+
                     <!-- Insights Section -->
                     <div class="result-section" id="insights-section">
                         <h3>AI-Generated Insights</h3>
                         <div id="insights-container" class="insights-container">
-                            <!-- Will be populated by JavaScript -->
                         </div>
                     </div>
-                    
+
                     <!-- Risk Profile Section -->
                     <div class="result-section" id="risk-section">
                         <h3>Risk Profile Analysis</h3>
@@ -330,14 +346,13 @@
                         <div class="risk-suggestions">
                             <h4>Improvement Suggestions</h4>
                             <ul id="risk-suggestions-list">
-                                <!-- Will be populated by JavaScript -->
                             </ul>
                         </div>
                     </div>
                 </div>
             </div>
         </section>
-        
+
         <section class="call-to-action-bottom">
             <div class="container">
                 <h2>Ready to Get Your AI Trading Report?</h2>
@@ -350,7 +365,7 @@
 
     <footer>
         <div class="container">
-            <p>© 2024 TradeAnalyticsAI. All Rights Reserved.</p>
+            <p>&copy; 2026 TradeAnalyticsAI. All Rights Reserved.</p>
             <p class="footer-disclaimer">Disclaimer: TradeAnalyticsAI provides analytical tools for informational purposes only and does not constitute financial, investment, or trading advice. Trading financial markets involves substantial risk of loss and is not suitable for every investor. You are solely responsible for your trading decisions.</p>
             <ul class="footer-links">
                 <li><a href="#">Privacy Policy</a></li>
@@ -361,6 +376,5 @@
     </footer>
 
     <script src="script.js"></script>
-    <!-- Payment links now go directly to Stripe Payment Links - no JS needed -->
 </body>
 </html>
