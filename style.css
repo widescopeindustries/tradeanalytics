@@ -1490,6 +1490,102 @@ input[type="file"]:hover {
 
 
 /* ============================================
+   Why Not ChatGPT Section
+   ============================================ */
+
+.why-not-chatgpt {
+  background: linear-gradient(135deg, var(--bg-elevated) 0%, var(--bg-deepest) 100%);
+  padding: var(--section-pad) 0;
+}
+
+.why-not-chatgpt h2 {
+  text-align: center;
+  font-size: clamp(1.8rem, 3vw, 2.5rem);
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 1rem;
+}
+
+.why-not-chatgpt .section-subtitle {
+  text-align: center;
+  color: var(--text-secondary);
+  margin-bottom: 2.5rem;
+  max-width: 700px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.chatgpt-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 20px;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.chatgpt-card {
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 14px;
+  padding: 28px;
+  border: 1px solid var(--border-subtle);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.chatgpt-card:hover {
+  transform: translateY(-4px);
+  background: rgba(255, 255, 255, 0.05);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.2);
+  border-color: var(--border-accent);
+}
+
+.chatgpt-card-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.chatgpt-card-header i {
+  font-size: 1.2rem;
+}
+
+.chatgpt-card-header .fa-calculator    { color: var(--blue); }
+.chatgpt-card-header .fa-chart-line    { color: var(--emerald); }
+.chatgpt-card-header .fa-search        { color: var(--gold); }
+.chatgpt-card-header .fa-file-pdf      { color: var(--crimson); }
+.chatgpt-card-header .fa-clock-rotate-left { color: var(--purple); }
+.chatgpt-card-header .fa-bolt          { color: var(--cyan); }
+
+.chatgpt-card-header h3 {
+  margin: 0;
+  font-size: 1.05rem;
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+.chatgpt-card p {
+  color: var(--text-secondary);
+  margin: 0;
+  font-size: 0.93rem;
+  line-height: 1.6;
+}
+
+.chatgpt-closing {
+  text-align: center;
+  color: var(--text-muted);
+  margin-top: 2.5rem;
+  font-size: 0.9rem;
+}
+
+/* Stagger chatgpt cards */
+.chatgpt-grid .reveal-on-scroll:nth-child(2) { transition-delay: 0.08s; }
+.chatgpt-grid .reveal-on-scroll:nth-child(3) { transition-delay: 0.16s; }
+.chatgpt-grid .reveal-on-scroll:nth-child(4) { transition-delay: 0.24s; }
+.chatgpt-grid .reveal-on-scroll:nth-child(5) { transition-delay: 0.32s; }
+.chatgpt-grid .reveal-on-scroll:nth-child(6) { transition-delay: 0.4s; }
+
+
+/* ============================================
    Call to Action Bottom
    ============================================ */
 

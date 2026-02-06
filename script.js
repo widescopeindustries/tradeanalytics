@@ -33,7 +33,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
         revealElements.forEach(el => revealObserver.observe(el));
     } else {
-        // Fallback: just show everything
         revealElements.forEach(el => el.classList.add('revealed'));
     }
 
@@ -43,10 +42,8 @@ document.addEventListener('DOMContentLoaded', () => {
     // =========================================
     const navbar = document.querySelector('.navbar');
     if (navbar) {
-        let lastScroll = 0;
         window.addEventListener('scroll', () => {
             const currentScroll = window.pageYOffset;
-            // Add a subtle background change when scrolled
             if (currentScroll > 50) {
                 navbar.style.background = 'rgba(15, 22, 41, 0.95)';
                 navbar.style.boxShadow = '0 8px 32px rgba(0, 0, 0, 0.6)';
@@ -54,7 +51,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 navbar.style.background = 'rgba(15, 22, 41, 0.8)';
                 navbar.style.boxShadow = '0 8px 32px rgba(0, 0, 0, 0.4)';
             }
-            lastScroll = currentScroll;
         }, { passive: true });
     }
 
@@ -71,7 +67,6 @@ document.addEventListener('DOMContentLoaded', () => {
             hamburgerButton.classList.toggle('active');
         });
 
-        // Close mobile menu when a link is clicked
         const mobileLinks = mobileMenu.querySelectorAll('a');
         mobileLinks.forEach(link => {
             link.addEventListener('click', () => {
@@ -80,7 +75,6 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         });
 
-        // Close mobile menu if clicked outside
         document.addEventListener('click', (event) => {
             const isClickInsideMenu = mobileMenu.contains(event.target);
             const isClickOnHamburger = hamburgerButton.contains(event.target);
@@ -111,7 +105,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     behavior: 'smooth'
                 });
 
-                // Close mobile menu if open
                 if (mobileMenu && mobileMenu.classList.contains('active')) {
                     mobileMenu.classList.remove('active');
                     hamburgerButton.classList.remove('active');
@@ -141,16 +134,18 @@ document.addEventListener('DOMContentLoaded', () => {
     // =========================================
     // Tab switching for results
     // =========================================
-    const tabButtons = document.querySelectorAll('.nav-button');
+    const navButtons = document.querySelectorAll('.nav-button');
     const resultSections = document.querySelectorAll('.result-section');
-    tabButtons.forEach(btn => {
+    navButtons.forEach(btn => {
         btn.addEventListener('click', () => {
-            tabButtons.forEach(b => b.classList.remove('active'));
+            navButtons.forEach(b => b.classList.remove('active'));
             resultSections.forEach(section => section.classList.remove('active'));
             btn.classList.add('active');
             const section = btn.getAttribute('data-section');
-            const el = document.getElementById(section + '-section');
-            if (el) el.classList.add('active');
+            const targetSection = document.getElementById(section + '-section');
+            if (targetSection) {
+                targetSection.classList.add('active');
+            }
         });
     });
 
@@ -188,13 +183,43 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
     // =========================================
-    // Manual entry form logic
+    // Manual entry form logic (with validation)
     // =========================================
     const manualForm = document.getElementById('manual-form');
     if (manualForm) {
         manualForm.addEventListener('submit', async (e) => {
             e.preventDefault();
             const entries = Array.from(document.querySelectorAll('#trade-entries .trade-entry'));
+
+            // Validate all entries before submission
+            for (const entry of entries) {
+                const date = entry.querySelector('input[name="date"]').value;
+                const symbol = entry.querySelector('input[name="symbol"]').value;
+                const price = parseFloat(entry.querySelector('input[name="price"]').value);
+                const size = parseFloat(entry.querySelector('input[name="size"]').value);
+                const profit = parseFloat(entry.querySelector('input[name="profit"]').value);
+
+                if (!date || !symbol) {
+                    alert('All trades must have a date and symbol.');
+                    return;
+                }
+
+                if (isNaN(price) || price <= 0) {
+                    alert('Price must be a valid positive number.');
+                    return;
+                }
+
+                if (isNaN(size) || size <= 0) {
+                    alert('Size must be a valid positive number.');
+                    return;
+                }
+
+                if (isNaN(profit)) {
+                    alert('Profit/Loss must be a valid number.');
+                    return;
+                }
+            }
+
             const trades = entries.map(entry => {
                 return {
                     date: entry.querySelector('input[name="date"]').value,
@@ -310,17 +335,39 @@ document.addEventListener('DOMContentLoaded', () => {
             analysis.insights.forEach(insight => {
                 const div = document.createElement('div');
                 div.className = 'insight-item';
-                div.innerHTML = `<h4>${insight.category}</h4><p>${insight.insight}</p><p><strong>Action:</strong> ${insight.actionItem}</p>`;
+                if (typeof insight === 'string') {
+                    div.textContent = insight;
+                } else if (insight.insight) {
+                    div.innerHTML = `<strong>${insight.category || 'Insight'}:</strong> ${insight.insight}<br><em>Action: ${insight.actionItem || 'N/A'}</em>`;
+                } else {
+                    div.textContent = JSON.stringify(insight);
+                }
                 insightsContainer.appendChild(div);
             });
         }
 
         // Fill risk profile
         if (analysis.riskProfile) {
-            document.getElementById('risk-indicator').querySelector('.risk-text').textContent = analysis.riskProfile.level || 'Medium';
-            document.getElementById('max-drawdown').textContent = (analysis.riskProfile.maxDrawdown || 0).toFixed(2) + '%';
-            document.getElementById('max-consecutive-losses').textContent = analysis.riskProfile.maxConsecutiveLosses || 0;
-            document.getElementById('risk-of-ruin').textContent = analysis.riskProfile.riskOfRuin || 'Low';
+            const riskIndicator = document.getElementById('risk-indicator');
+            if (riskIndicator && riskIndicator.querySelector('.risk-text')) {
+                riskIndicator.querySelector('.risk-text').textContent = analysis.riskProfile.riskLevel || 'Medium';
+            }
+
+            const maxDrawdownEl = document.getElementById('max-drawdown');
+            if (maxDrawdownEl) {
+                maxDrawdownEl.textContent = (analysis.riskProfile.maxDrawdown || 0).toFixed(2);
+            }
+
+            const maxLossesEl = document.getElementById('max-consecutive-losses');
+            if (maxLossesEl) {
+                maxLossesEl.textContent = analysis.riskProfile.maxConsecutiveLosses || 0;
+            }
+
+            const riskRuinEl = document.getElementById('risk-of-ruin');
+            if (riskRuinEl) {
+                riskRuinEl.textContent = analysis.riskProfile.riskOfRuin || 'Low';
+            }
+
             const suggestionsList = document.getElementById('risk-suggestions-list');
             if (suggestionsList) {
                 suggestionsList.innerHTML = '';
@@ -337,20 +384,24 @@ document.addEventListener('DOMContentLoaded', () => {
         const el = document.getElementById(elementId);
         if (!el) return;
         el.innerHTML = '';
-        if (patterns && typeof patterns === 'object' && !Array.isArray(patterns)) {
-            Object.entries(patterns).forEach(([key, value]) => {
-                const div = document.createElement('div');
-                div.className = 'pattern-item';
-                div.innerHTML = `<strong>${key.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase())}:</strong> ${value}`;
-                el.appendChild(div);
-            });
-        } else if (Array.isArray(patterns)) {
+        if (Array.isArray(patterns)) {
             patterns.forEach(pattern => {
                 const div = document.createElement('div');
                 div.className = 'pattern-item';
                 div.textContent = pattern;
                 el.appendChild(div);
             });
+        } else if (typeof patterns === 'object' && patterns !== null) {
+            for (const [key, value] of Object.entries(patterns)) {
+                const div = document.createElement('div');
+                div.className = 'pattern-item';
+                if (Array.isArray(value)) {
+                    div.innerHTML = `<strong>${key}:</strong> ${value.join(', ')}`;
+                } else {
+                    div.innerHTML = `<strong>${key}:</strong> ${value}`;
+                }
+                el.appendChild(div);
+            }
         }
     }
 
